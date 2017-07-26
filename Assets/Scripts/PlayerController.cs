@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour {
         Ray ray = new Ray(transform.position, -transform.up);
         RaycastHit hit;
 
-        if(Physics.Raycast(ray, out hit, 1.5f, ground)) {
+        if(Physics.SphereCast(ray, .5f, 1.5f, ground)) {
             velocityY = 0;
         }
         
