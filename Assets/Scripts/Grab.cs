@@ -12,6 +12,14 @@ public class Grab : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.F)) {
             PickUp();
         }
+
+        if(Input.GetMouseButtonDown(0) && isGrabbing) {
+            grabbedObject.transform.parent.DetachChildren();
+            grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
+            grabbedObject.GetComponent<BoxCollider>().enabled = true;
+            grabbedObject.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 400);        
+            isGrabbing = false;        
+        }
 	}
 
     private void PickUp() {
