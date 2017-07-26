@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour {
     public LayerMask ground;
     bool isGrounded;
 
-    float walkSpeed = 5;
+    public float walkSpeed = 10;
     Vector3 targetWalkAmount;
     Vector3 walkAmount;
     Vector3 smoothDampMoveRef;
@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour {
         Ray ray = new Ray(transform.position, -transform.up);
         RaycastHit hit;
 
-        if(Physics.SphereCast(ray, .5f, 1.5f, ground)) {
+        if(Physics.SphereCast(ray, .5f, 1f, ground)) {
             velocityY = 0;
         }
         

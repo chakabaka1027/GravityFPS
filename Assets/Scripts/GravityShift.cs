@@ -14,12 +14,13 @@ public class GravityShift : MonoBehaviour {
             gravityShifted = 1 - gravityShifted;
             if(gravityShifted == 1) {
                 GetComponent<PlayerController>().gravity *= -1;
-                GetComponent<PlayerController>().velocityY = 0;
+                
+                //GetComponent<PlayerController>().velocityY = 0;
                 StopCoroutine("SmoothRotation");
                 StartCoroutine("SmoothRotation");
             } else if(gravityShifted == 0) {
                 GetComponent<PlayerController>().gravity *= -1;
-                GetComponent<PlayerController>().velocityY = 0;
+                //GetComponent<PlayerController>().velocityY = 0;
 
                 StopCoroutine("SmoothRotation");
                 StartCoroutine("SmoothRotation");
