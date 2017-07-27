@@ -21,18 +21,13 @@ Platform assembly: C:\Users\alexa\Documents\GitHub\GravityFPS\GravityFPS_Data\Ma
 Loading C:\Users\alexa\Documents\GitHub\GravityFPS\GravityFPS_Data\Managed\UnityEngine.Timeline.dll into Unity Child Domain
 Platform assembly: C:\Users\alexa\Documents\GitHub\GravityFPS\GravityFPS_Data\Managed\System.dll (this message is harmless)
 Platform assembly: C:\Users\alexa\Documents\GitHub\GravityFPS\GravityFPS_Data\Managed\System.Core.dll (this message is harmless)
-- Completed reload, in  0.016 seconds
+- Completed reload, in  0.019 seconds
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 0.784350 ms
+UnloadTime: 0.728654 ms
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 20cc -> priority: 1 
-  Thread -> id: 2c5c -> priority: 1 
-  Thread -> id: 2c54 -> priority: 1 
-  Thread -> id: 4268 -> priority: 1 
-Log: connection {1} has been disconnected by timeout; address {::ffff:127.0.0.1:7777} time {67090}, last rec time {64596} rtt {11} timeout {2000}
-ClientDisconnected due to error: Timeout
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
+  Thread -> id: 4228 -> priority: 1 
+  Thread -> id: 7d4 -> priority: 1 
+  Thread -> id: 3354 -> priority: 1 
+  Thread -> id: 9ac -> priority: 1 
