@@ -9,6 +9,7 @@ public class Grab : MonoBehaviour {
     GameObject grabbedObject;
     float positionLerpSpeed = 30;
     float rotationLerpSpeed = 25;
+	Material grabbedObjColor;
 	
 	void Update () {
 		if(Input.GetKeyDown(KeyCode.F)) {
@@ -41,6 +42,11 @@ public class Grab : MonoBehaviour {
         if(Physics.SphereCast(ray, .4f, transform.forward, out hit, 2.5f, grabable) && !isGrabbing) {
             grabbedObject = hit.collider.gameObject;
             grabbedObject.GetComponent<Rigidbody>().isKinematic = true;
+
+			grabbedObjColor = grabbedObject.GetComponent<Renderer>().material;
+			grabbedObjColor.color = new Color(grabbedObjColor.color.r, grabbedObjColor.color.g, grabbedObjColor.color.b, .8f);
+			//Color.Lerp(grabbedObject.GetComponent<Material>().color, 
+
             if(grabbedObject.GetComponent<BoxCollider>() != null) {
                 grabbedObject.GetComponent<BoxCollider>().enabled = false;
             } else if(grabbedObject.GetComponent<SphereCollider>() != null) {
@@ -49,6 +55,10 @@ public class Grab : MonoBehaviour {
             isGrabbing = true;
         } else if(isGrabbing) {
             grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
+
+			grabbedObjColor = grabbedObject.GetComponent<Renderer>().material;
+			grabbedObjColor.color = new Color(grabbedObjColor.color.r, grabbedObjColor.color.g, grabbedObjColor.color.b, 1);
+
             if(grabbedObject.GetComponent<BoxCollider>() != null) {
                 grabbedObject.GetComponent<BoxCollider>().enabled = true;
             } else if(grabbedObject.GetComponent<SphereCollider>() != null) {
@@ -60,6 +70,9 @@ public class Grab : MonoBehaviour {
     }
     
     void Throw() {
+		grabbedObjColor = grabbedObject.GetComponent<Renderer>().material;
+		grabbedObjColor.color = new Color(grabbedObjColor.color.r, grabbedObjColor.color.g, grabbedObjColor.color.b, 1);
+
 		isGrabbing = false;        
         grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
         if(grabbedObject.GetComponent<BoxCollider>() != null) {
