@@ -31,7 +31,7 @@ public class GravityShift : MonoBehaviour {
         float speed = 1 / time;
         
         while(percent < 1) {
-            percent += Time.deltaTime * speed;
+            percent += Time.smoothDeltaTime * speed;
             if(gravityShifted == 1) {
                 transform.localEulerAngles = Vector3.Lerp(new Vector3(0, transform.localEulerAngles.y, 0), new Vector3(0, transform.localEulerAngles.y, 180), percent);
             } else if(gravityShifted == 0) {

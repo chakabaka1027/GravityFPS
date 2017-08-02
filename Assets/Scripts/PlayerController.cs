@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(GravityShift))]	
 public class PlayerController : MonoBehaviour {
 
+	public bool isSlowing = false;
+
 	//Crouch
     public LayerMask ground;
     bool isGrounded;
@@ -17,7 +19,7 @@ public class PlayerController : MonoBehaviour {
     bool hitCeiling = false;
 
     //movement
-    float walkSpeed = 10;
+    public float walkSpeed = 10;
     Vector3 targetWalkAmount;
     Vector3 walkAmount;
     Vector3 smoothDampMoveRef;
@@ -53,6 +55,17 @@ public class PlayerController : MonoBehaviour {
 	//shift gravity
 		if(Input.GetKeyDown(KeyCode.Space)){
 			gravityShift.ShiftGravity();
+		}
+
+	//slow time
+		if(Input.GetMouseButton(1)){
+			Time.timeScale = .25f;
+			Time.fixedDeltaTime = Time.timeScale * .02f;
+			isSlowing = true;
+		} else if (Input.GetMouseButtonUp(1)){
+			Time.timeScale = 1;
+			Time.fixedDeltaTime = Time.fixedUnscaledDeltaTime;
+			isSlowing = false;
 		}
     }
 
@@ -133,7 +146,7 @@ public class PlayerController : MonoBehaviour {
 		if(crouchToggle == 1){
 			height = .25f;
 			while(percent < 1){
-				percent += Time.deltaTime * speed;
+				percent += Time.fixedDeltaTime * speed;
 				gameObject.transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1, .5f, 1), percent);
 				yield return null;
 			}
@@ -145,7 +158,7 @@ public class PlayerController : MonoBehaviour {
 			StartCoroutine("LiftWhenUncrouching");
 			height = .75f;
 			while(percent > 0){
-				percent -= Time.deltaTime * speed;
+				percent -= Time.fixedDeltaTime * speed;
 				gameObject.transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1, 1, 1), (1 - percent));
 				yield return null;
 			}
@@ -164,7 +177,7 @@ public class PlayerController : MonoBehaviour {
 			float t = .3f;
 			float s = 1 / t;
 			while(percent < 1){
-				percent += Time.deltaTime * s;
+				percent += Time.fixedDeltaTime * s;
 				if(gravityShift.gravityShifted == 0){
 					gameObject.transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition + Vector3.up * .02f, percent);
 				} else if(gravityShift.gravityShifted == 1){
