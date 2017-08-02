@@ -16,6 +16,13 @@ public class Grab : MonoBehaviour {
         if(Input.GetMouseButtonDown(0) && isGrabbing) {
            Throw();
         }
+       
+	}
+
+	void LateUpdate(){
+		if(isGrabbing){
+        	Carry(grabbedObject);
+        }
 	}
 
     private void PickUp() {
@@ -24,7 +31,7 @@ public class Grab : MonoBehaviour {
 
         if(Physics.SphereCast(ray, .25f, transform.forward, out hit, 1.5f, grabable) && !isGrabbing) {
             grabbedObject = hit.collider.gameObject;
-            grabbedObject.transform.parent = gameObject.transform;
+            //grabbedObject.transform.parent = gameObject.transform;
             grabbedObject.GetComponent<Rigidbody>().isKinematic = true;
             if(grabbedObject.GetComponent<BoxCollider>() != null) {
                 grabbedObject.GetComponent<BoxCollider>().enabled = false;
@@ -33,7 +40,8 @@ public class Grab : MonoBehaviour {
             }
             isGrabbing = true;
         } else if(isGrabbing) {
-            grabbedObject.transform.parent.DetachChildren();
+            //grabbedObject.transform.parent.DetachChildren();
+
             grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
             if(grabbedObject.GetComponent<BoxCollider>() != null) {
                 grabbedObject.GetComponent<BoxCollider>().enabled = true;
@@ -46,14 +54,19 @@ public class Grab : MonoBehaviour {
     }
     
     void Throw() {
-        grabbedObject.transform.parent.DetachChildren();
+        //grabbedObject.transform.parent.DetachChildren();
+		isGrabbing = false;        
         grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
         if(grabbedObject.GetComponent<BoxCollider>() != null) {
             grabbedObject.GetComponent<BoxCollider>().enabled = true;
         } else if(grabbedObject.GetComponent<SphereCollider>() != null) {
             grabbedObject.GetComponent<SphereCollider>().enabled = true;
         }               grabbedObject.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 1600);        
-        isGrabbing = false;        
 
+    }
+
+    void Carry(GameObject obj){
+    	obj.transform.position = Vector3.Lerp(obj.transform.position, Camera.main.transform.position + Camera.main.transform.forward * 2, Time.deltaTime * 20);
+		obj.transform.eulerAngles = Vector3.Lerp(obj.transform.eulerAngles, new Vector3(0, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z), Time.deltaTime * 15);
     }
 }
