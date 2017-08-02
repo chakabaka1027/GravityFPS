@@ -6,26 +6,22 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class GravityShift : MonoBehaviour {
 
     public int gravityShifted = 0;
-    //float constantForceValue = 196.2f;
-	
-	// Update is called once per frame
-	void Update () {
-		if(Input.GetKeyDown(KeyCode.Space)) {
-            gravityShifted = 1 - gravityShifted;
-            if(gravityShifted == 1) {
-                GetComponent<PlayerController>().gravity *= -1;
-                
-                //GetComponent<PlayerController>().velocityY = 0;
-                StopCoroutine("SmoothRotation");
-                StartCoroutine("SmoothRotation");
-            } else if(gravityShifted == 0) {
-                GetComponent<PlayerController>().gravity *= -1;
-                //GetComponent<PlayerController>().velocityY = 0;
+    	
+	public void ShiftGravity(){
+		gravityShifted = 1 - gravityShifted;
+        if(gravityShifted == 1) {
+            GetComponent<PlayerController>().gravity *= -1;
+            
+            //GetComponent<PlayerController>().velocityY = 0;
+            StopCoroutine("SmoothRotation");
+            StartCoroutine("SmoothRotation");
+        } else if(gravityShifted == 0) {
+            GetComponent<PlayerController>().gravity *= -1;
+            //GetComponent<PlayerController>().velocityY = 0;
 
-                StopCoroutine("SmoothRotation");
-                StartCoroutine("SmoothRotation");
+            StopCoroutine("SmoothRotation");
+            StartCoroutine("SmoothRotation");
 
-            }
         }
 	}
 

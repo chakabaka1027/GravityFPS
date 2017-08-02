@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(GravityShift))]	
 public class PlayerController : MonoBehaviour {
 
 	//Crouch
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour {
     float percent = 0;
 
     //flip grav
+	GravityShift gravityShift;
     bool hitCeiling = false;
 
     //movement
@@ -19,22 +21,19 @@ public class PlayerController : MonoBehaviour {
     Vector3 targetWalkAmount;
     Vector3 walkAmount;
     Vector3 smoothDampMoveRef;
-    Rigidbody rb;
     CharacterController controller;
 
     public float gravity = -12;
     public float velocityY;
 
     [Header("Look Controls")]
-	[Range (-5, 5)]
+	[Range (-10, 10)]
 	public float mouseSensitivityX = 6f;
-	[Range (-5, 5)]
+	[Range (-10, 10)]
 	public float mouseSensitivityY = 6f;
 	float verticalLookRotation;
-    GravityShift gravityShift;
 
 
-	// Use this for initialization
 	void Start () {
         controller = GetComponent<CharacterController>();
         gravityShift = GetComponent<GravityShift>();
@@ -42,35 +41,31 @@ public class PlayerController : MonoBehaviour {
         Cursor.visible = false;
 	}
 	
-	// Update is called once per frame
     void Update() {
+
+    //set movespeed
         if(Input.GetKeyDown(KeyCode.LeftShift)){
         	walkSpeed = 3;
 		} else if (Input.GetKeyUp(KeyCode.LeftShift)){
 			walkSpeed = 10;
 		}
 
-		if(Input.GetKeyDown(KeyCode.C)){
-			//StopCoroutine("CrouchToggle");
-			crouchToggle = 1 - crouchToggle;
-			StopCoroutine("CrouchToggle");
-
-			StartCoroutine("CrouchToggle");
+	//shift gravity
+		if(Input.GetKeyDown(KeyCode.Space)){
+			gravityShift.ShiftGravity();
 		}
-
-		//detect if hit ceiling
-		Ray ray = new Ray(transform.position, transform.up);
-
-        if(Physics.SphereCast(ray, .5f, height, ground) && !hitCeiling) {
-			StartCoroutine("HitCeiling");
-        }  
-
-
-		
     }
 
 	void LateUpdate () {
 
+	//crouch
+		if(Input.GetKeyDown(KeyCode.C)){
+			crouchToggle = 1 - crouchToggle;
+			StopCoroutine("CrouchToggle");
+			StartCoroutine("CrouchToggle");
+		}
+
+	//look rotations
         transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * mouseSensitivityX);
 	    verticalLookRotation += Input.GetAxis("Mouse Y") * mouseSensitivityY;
 		verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
@@ -81,7 +76,7 @@ public class PlayerController : MonoBehaviour {
         Vector3 newRight = Vector3.Cross(Vector3.up, gameObject.transform.forward);
         Vector3 newForward = Vector3.Cross(newRight, Vector3.up);
 
-
+    //movement
         if(gravityShift.gravityShifted == 0) {
             Vector3 trueMoveDir = (newRight * Input.GetAxisRaw("Horizontal") + newForward * Input.GetAxisRaw("Vertical"));
             targetWalkAmount = trueMoveDir * walkSpeed + Vector3.up * velocityY;
@@ -89,7 +84,7 @@ public class PlayerController : MonoBehaviour {
 		    walkAmount = Vector3.SmoothDamp(walkAmount, targetWalkAmount, ref smoothDampMoveRef, 0.1f);
             controller.Move(walkAmount * Time.fixedDeltaTime);
 
-            //reverse controls if gravity is shifted
+    //reverse controls if gravity is shifted
         } else if (gravityShift.gravityShifted == 1) {
             Vector3 trueMoveDir = (-newRight * Input.GetAxisRaw("Horizontal") + newForward * Input.GetAxisRaw("Vertical"));
             targetWalkAmount = trueMoveDir * walkSpeed + Vector3.up * velocityY;
@@ -101,27 +96,37 @@ public class PlayerController : MonoBehaviour {
 
         velocityY += Time.deltaTime * gravity;
 
-        //detect when grounded
-        Ray ray = new Ray(transform.position, -transform.up);
+        //detect when grounded or when hitting ceiling
+        HitGround();
+		StartCoroutine("HitCeiling");
 
-        if(Physics.SphereCast(ray, .5f, height, ground)) {
-            velocityY = 0;
-        }  
        
 	}
 
 	IEnumerator HitCeiling(){
-		hitCeiling = true;
-		velocityY = 0;
+		Ray ray = new Ray(transform.position, transform.up);
 
-		yield return new WaitForSeconds(0.5f);
-		hitCeiling = false;
+        if(Physics.SphereCast(ray, .5f, height, ground) && !hitCeiling) {
+			hitCeiling = true;
+			velocityY = 0;
+
+			yield return new WaitForSeconds(0.5f);
+			hitCeiling = false;        
+		}  
+       
+	}
+
+	void HitGround(){
+		Ray ray = new Ray(transform.position, -transform.up);
+
+        if(Physics.SphereCast(ray, .5f, height, ground)) {
+            velocityY = 0;
+        }  
 	}
 
 
 	IEnumerator CrouchToggle(){
-		//float percent = 0;
-		float time = .5f;
+		float time = .25f;
 		float speed = 1 / time;
 
 		//crouch
@@ -153,21 +158,20 @@ public class PlayerController : MonoBehaviour {
 	IEnumerator LiftWhenUncrouching(){
 		Ray ray = new Ray(transform.position, -transform.up);
 
-			//move character up if 
-	        if(Physics.SphereCast(ray, .5f, height, ground)) {
-				float percent = 0;
-				float t = .5f;
-				float s = 1 / t;
-				while(percent < 1){
-					percent += Time.deltaTime * s;
-					if(gravityShift.gravityShifted == 0){
-						gameObject.transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition + Vector3.up * .03f, percent);
-					} else if(gravityShift.gravityShifted == 1){
-						gameObject.transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition - Vector3.up * .03f, percent);
-					} 
-					yield return null;
-				}
-	        }  
+		//move character up when uncrouching 
+        if(Physics.SphereCast(ray, .5f, height, ground)) {
+			float percent = 0;
+			float t = .3f;
+			float s = 1 / t;
+			while(percent < 1){
+				percent += Time.deltaTime * s;
+				if(gravityShift.gravityShifted == 0){
+					gameObject.transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition + Vector3.up * .02f, percent);
+				} else if(gravityShift.gravityShifted == 1){
+					gameObject.transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition - Vector3.up * .02f, percent);
+				} 
+				yield return null;
+			}
+        }  
 	}
-    
 }
