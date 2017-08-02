@@ -6,7 +6,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class GravityShift : MonoBehaviour {
 
     public int gravityShifted = 0;
-    float constantForceValue = 196.2f;
+    //float constantForceValue = 196.2f;
 	
 	// Update is called once per frame
 	void Update () {
