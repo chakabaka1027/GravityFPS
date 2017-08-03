@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 143338524602669970}
   - component: {fileID: 114470240879474308}
   - component: {fileID: 114051793379900326}
+  - component: {fileID: 114889481469616758}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -60,7 +61,6 @@ GameObject:
   - component: {fileID: 92787249617165628}
   - component: {fileID: 81409145634881150}
   - component: {fileID: 114610604387268072}
-  - component: {fileID: 114552364277445054}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -221,27 +221,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b5c35b870313ba47ac2d363d5d5ac3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSlowing: 0
   ground:
     serializedVersion: 2
     m_Bits: 4294967295
+  walkSpeed: 10
   gravity: -36
   velocityY: 0
   mouseSensitivityX: 6
   mouseSensitivityY: 6
---- !u!114 &114552364277445054
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1791529079364596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba21442a23c9d8141be4f9ee4709974c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grabable:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!114 &114610604387268072
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -254,6 +242,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: 471b3452223a3ce4d9c7f510e4b4f6c9, type: 2}
+--- !u!114 &114889481469616758
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1505529214959432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba21442a23c9d8141be4f9ee4709974c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grabable:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!124 &124295359714486094
 Behaviour:
   m_ObjectHideFlags: 1

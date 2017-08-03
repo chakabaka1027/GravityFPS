@@ -5,7 +5,11 @@ using UnityEngine;
 public class Grab : MonoBehaviour {
     
     public LayerMask grabable;
+    //public LayerMask checkCollisions;
+    bool hasCollided;
+
     bool isGrabbing = false;
+
     GameObject grabbedObject;
     float positionLerpSpeed = 30;
     float rotationLerpSpeed = 25;
@@ -32,6 +36,7 @@ public class Grab : MonoBehaviour {
 	void LateUpdate(){
 		if(isGrabbing){
         	Carry(grabbedObject);
+        	CheckCollisions();
         }
 	}
 
@@ -39,13 +44,12 @@ public class Grab : MonoBehaviour {
         Vector3 ray = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
-        if(Physics.SphereCast(ray, .4f, transform.forward, out hit, 2.5f, grabable) && !isGrabbing) {
+        if(Physics.SphereCast(ray, .4f, Camera.main.transform.forward, out hit, 2.5f, grabable) && !isGrabbing) {
             grabbedObject = hit.collider.gameObject;
             grabbedObject.GetComponent<Rigidbody>().isKinematic = true;
 
 			grabbedObjColor = grabbedObject.GetComponent<Renderer>().material;
 			grabbedObjColor.color = new Color(grabbedObjColor.color.r, grabbedObjColor.color.g, grabbedObjColor.color.b, .8f);
-			//Color.Lerp(grabbedObject.GetComponent<Material>().color, 
 
             if(grabbedObject.GetComponent<BoxCollider>() != null) {
                 grabbedObject.GetComponent<BoxCollider>().enabled = false;
@@ -85,7 +89,24 @@ public class Grab : MonoBehaviour {
     }
 
     void Carry(GameObject obj){
-    	obj.transform.position = Vector3.Lerp(obj.transform.position, Camera.main.transform.position + Camera.main.transform.forward * 2, Time.fixedDeltaTime * positionLerpSpeed);
-		obj.transform.eulerAngles = Vector3.Lerp(obj.transform.eulerAngles, new Vector3(0, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z), Time.fixedDeltaTime * rotationLerpSpeed);
+    	if(!hasCollided){
+    		obj.transform.position = Vector3.Lerp(obj.transform.position, Camera.main.transform.position + Camera.main.transform.forward * 2, Time.fixedDeltaTime * positionLerpSpeed);
+			obj.transform.eulerAngles = Vector3.Lerp(obj.transform.eulerAngles, new Vector3(0, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z), Time.fixedDeltaTime * rotationLerpSpeed);
+		}
+    }
+
+    void CheckCollisions(){
+		Vector3 ray = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+
+        if(Physics.SphereCast(ray, .5f, Camera.main.transform.forward, out hit, 3f)) {
+        	hasCollided = true;
+        	//grabbedObject.transform.position = hit.point + hit.normal * .5f;
+
+			grabbedObject.transform.position = Vector3.Lerp(grabbedObject.transform.position, hit.point + hit.normal * .5f, Time.fixedDeltaTime * positionLerpSpeed);
+			grabbedObject.transform.eulerAngles = Vector3.Lerp(grabbedObject.transform.eulerAngles, new Vector3(0, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z), Time.fixedDeltaTime * rotationLerpSpeed);
+        } else {
+        	hasCollided = false;
+        }
     }
 }

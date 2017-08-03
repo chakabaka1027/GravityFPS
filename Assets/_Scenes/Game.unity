@@ -451,6 +451,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114889481469616758, guid: e3c45467a9776834f915ac773d6d0fa9,
+        type: 2}
+      propertyPath: checkCollisions.m_Bits
+      value: 4294967039
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3c45467a9776834f915ac773d6d0fa9, type: 2}
   m_IsPrefabParent: 0

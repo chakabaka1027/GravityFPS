@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(GravityShift))]	
+[RequireComponent(typeof(GravityShift))]
+[RequireComponent(typeof(Grab))]
 public class PlayerController : MonoBehaviour {
 
 	public bool isSlowing = false;
