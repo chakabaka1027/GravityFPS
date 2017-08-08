@@ -99,7 +99,7 @@ public class Grab : MonoBehaviour {
 		Vector3 ray = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
-        if(Physics.SphereCast(ray, .5f, Camera.main.transform.forward, out hit, 3f)) {
+        if(Physics.SphereCast(ray, .5f, Camera.main.transform.forward, out hit, 2f)) {
         	hasCollided = true;
         	//grabbedObject.transform.position = hit.point + hit.normal * .5f;
 
