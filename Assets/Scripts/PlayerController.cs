@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour {
     bool isGrounded;
     int crouchToggle = 0;
     float height = .75f;
-    float percent = 0;
+    float crouchLerpPercent = 0;
 
     //flip grav
 	GravityShift gravityShift;
@@ -146,25 +146,25 @@ public class PlayerController : MonoBehaviour {
 		//crouch
 		if(crouchToggle == 1){
 			height = .25f;
-			while(percent < 1){
-				percent += Time.fixedDeltaTime * speed;
-				gameObject.transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1, .5f, 1), percent);
+			while(crouchLerpPercent < 1){
+				crouchLerpPercent += Time.fixedDeltaTime * speed;
+				gameObject.transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1, .5f, 1), crouchLerpPercent);
 				yield return null;
 			}
-			percent = 1;
+			crouchLerpPercent = 1;
 
 		//stand up
 		} if(crouchToggle == 0){
 			
 			StartCoroutine("LiftWhenUncrouching");
 			height = .75f;
-			while(percent > 0){
-				percent -= Time.fixedDeltaTime * speed;
-				gameObject.transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1, 1, 1), (1 - percent));
+			while(crouchLerpPercent > 0){
+				crouchLerpPercent -= Time.fixedDeltaTime * speed;
+				gameObject.transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1, 1, 1), (1 - crouchLerpPercent));
 				yield return null;
 			}
 
-			percent = 0;
+			crouchLerpPercent = 0;
 
 		}
 	}
@@ -188,4 +188,17 @@ public class PlayerController : MonoBehaviour {
 			}
         }  
 	}
+
+	//push rigidbody objects upon colliding with them
+	void OnControllerColliderHit(ControllerColliderHit hit) {
+        Rigidbody body = hit.collider.attachedRigidbody;
+        if (body == null || body.isKinematic)
+            return;
+        
+        if (hit.moveDirection.y < -0.3F)
+            return;
+        
+        Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+        body.velocity = pushDir * 5;
+    }
 }

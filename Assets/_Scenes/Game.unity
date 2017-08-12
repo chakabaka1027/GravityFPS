@@ -588,6 +588,21 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 143338524602669970, guid: e3c45467a9776834f915ac773d6d0fa9,
+        type: 2}
+      propertyPath: m_StepOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114051793379900326, guid: e3c45467a9776834f915ac773d6d0fa9,
+        type: 2}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2064018151}
+    - target: {fileID: 114470240879474308, guid: e3c45467a9776834f915ac773d6d0fa9,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3c45467a9776834f915ac773d6d0fa9, type: 2}
   m_IsPrefabParent: 0
@@ -2638,6 +2653,11 @@ Transform:
   m_Father: {fileID: 463980246}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &2064018151 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4727516503742180, guid: e3c45467a9776834f915ac773d6d0fa9,
+    type: 2}
+  m_PrefabInternal: {fileID: 381889736}
 --- !u!4 &2113518498 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 90d8e09703679534295bd2cacb73d6de, type: 2}
